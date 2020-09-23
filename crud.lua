@@ -2,6 +2,9 @@
 --
 -- @module crud
 
+
+require('checks')
+package.loaded['checks'] = function() end
 local registry = require('crud.common.registry')
 local call = require('crud.common.call')
 local insert = require('crud.insert')
