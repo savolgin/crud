@@ -1,0 +1,23 @@
+name: Run tests on any Push event
+
+on:
+  push:
+    tags:
+      - '!refs/tags/*'
+    branches:
+      - '*'
+jobs:
+  run_tests:
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@master
+      - name: Install requirements
+        run: |
+          sudo apt install -y git gcc cmake make unzip curl
+          curl -L https://tarantool.io/installer.sh | sudo VER=${TARANTOOL_VERSION} bash
+          sudo apt install -y tarantool-dev
+          ./deps.sh
+      - name: Run linter
+        run: .rocks/bin/luacheck .
+      - name: Run tests
+        run: .rocks/bin/luatest -v
